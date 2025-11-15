@@ -1,0 +1,13 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+<a href="#">+ New Blog post</a>
+
+      <div class="post-entry">
+          </div>
+           {% for post in post_list %}
+          <h2><a href="">{{post.title}}</a></h2>
+          <p>{{post.body}}</p>
+      </div>
+   {% endfor %}
+{% endblock content %}
