@@ -1,0 +1,13 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="post entry">
+    <h1 style="color:#0044cc;">{{ posts.title }}</h1>
+<p>{{ posts.body }}</p>
+</div>
+<a href="{% url 'blog-update' posts.pk %}">+ Edit</a>
+<a href="{% url 'blog-delete' posts.pk %}">- Delete</a>
+
+
+{% endblock %}
