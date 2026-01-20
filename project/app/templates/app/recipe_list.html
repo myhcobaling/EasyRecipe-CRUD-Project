@@ -1,0 +1,27 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<h2>EasyRecipe File - My Collection</h2>
+<a href="{% url 'recipe_create' %}">+ Add New Recipe</a>
+<hr>
+
+{% for recipe in recipes %}
+    <div class="recipe-card">
+        <h2>
+            <a href="{% url 'recipe_detail' recipe.pk %}">
+                {{ recipe.title }}
+            </a>
+        </h2>
+
+        <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+        <p><strong>Instructions Preview:</strong> {{ recipe.instructions|truncatewords:20 }}</p>
+
+        <a href="{% url 'recipe_update' recipe.pk %}">Edit</a> |
+        <a href="{% url 'recipe_delete' recipe.pk %}" style="color: red;">Delete</a>
+        <hr>
+    </div>
+{% empty %}
+    <p>No recipes available.</p>
+{% endfor %}
+
+{% endblock %}

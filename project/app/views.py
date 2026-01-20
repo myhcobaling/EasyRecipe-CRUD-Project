@@ -1,52 +1,43 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView
-from django.views.generic.edit import CreateView , UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
-from .models import Post
+from .models import Recipe  # Changed from Book
 from django.urls import reverse_lazy
-
 
 class HomepageView(TemplateView):
     template_name = 'app/home.html'
 
-
 class AboutpageView(TemplateView):
     template_name = 'app/about.html'
 
+class RecipeListView(ListView): # Changed name
+    model = Recipe                    
+    context_object_name = 'recipes'    
+    template_name = 'app/recipe_list.html'
 
-class BlogListView(ListView):
-    model = Post
-    context_object_name = 'posts'
-    template_name = 'app/blog_list.html'
+class RecipeDetailView(DetailView): # Changed name
+    model = Recipe
+    context_object_name = 'recipe'    
+    template_name = 'app/recipe_detail.html'
 
+class RecipeCreateView(CreateView): # Changed name
+    model = Recipe
+    # Updated fields to match your Proposal objectives 
+    fields = ['title', 'ingredients', 'instructions', 'cooking_time'] 
+    template_name = 'app/recipe_create.html'
 
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        return super().form_valid(form)
 
-class BlogDetailView(DetailView):
-    model = Post
-    context_object_name = 'posts'
-    template_name = 'app/blog_detail.html'
+class RecipeUpdateView(UpdateView): # Changed name
+    model = Recipe
+    template_name = 'app/recipe_update.html'
+    fields = ['title', 'ingredients', 'instructions', 'cooking_time'] 
+    success_url = reverse_lazy('recipe_list')  
 
-
-class BlogCreateView(CreateView):
-    model = Post
-    fields = ['title', 'author', 'body']
-    template_name = 'app/blog_create.html'
-
-    def get_form(self):
-        form = super().get_form()
-        form.fields['author'].queryset = User.objects.all()
-        return form
-
-class BlogUpdateView(UpdateView):
-    model = Post
-    template_name = 'app/blog_update.html'
-    fields = ['title', 'author', 'body']
-    success_url = reverse_lazy('blog')
-
-class BlogDeleteView(DeleteView):
-    model = Post
-    template_name = 'app/blog_delete.html'
-    success_url = reverse_lazy('blog')
-
-
-
+class RecipeDeleteView(DeleteView):
+    model = Recipe
+    template_name = 'app/recipe_delete.html'
+    success_url = reverse_lazy('recipe_list') # Redirects back to the list
